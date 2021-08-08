@@ -2,23 +2,35 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 
 (async () => {
+  const cookiesString = fs.readFileSync('./canvas-session.json', 'utf8');
+    //console.log("cookiesString are ", cookiesString);
+    const cookies = JSON.parse(cookiesString);
   const browser = await puppeteer.launch({ headless: false,
     args: [ '--use-fake-ui-for-media-stream', "--no-sandbox", "--disable-setuid-sandbox" ] });
   const page = await browser.newPage();
-  await page.goto('https://gather.town/app/fPk72yAiEmUCbLmM/aaa');
+  await page.setCookie.apply(page, cookies);
 
-  const previousSession = fs.existsSync('cookies.json')
-  if (previousSession) {
-    // If file exist load the cookies
-    const cookiesString = fs.readFileSync('cookies.json');
-    const parsedCookies = JSON.parse(cookiesString);
-    if (parsedCookies.length !== 0) {
-      for (let cookie of parsedCookies) {
-        await page.setCookie(cookie)
-      }
-      console.log('Session has been loaded in the browser')
-    }
-  }
+  await page.goto('https://gather.town/app/fPk72yAiEmUCbLmM/aaa', {waitUntil: 'load'});
+  // const cookies = await page.cookies()
+  // console.info("cookies are ", cookies);
+
+  // fs.writeFile('canvas-session.json', JSON.stringify(cookies, null, 2), function(err) {
+  //     if (err) throw err;
+  //     console.log('completed write of cookies');
+  // });
+
+  // const previousSession = fs.existsSync('cookies.json')
+  // if (previousSession) {
+  //   // If file exist load the cookies
+  //   const cookiesString = fs.readFileSync('cookies.json');
+  //   const parsedCookies = JSON.parse(cookiesString);
+  //   if (parsedCookies.length !== 0) {
+  //     for (let cookie of parsedCookies) {
+  //       await page.setCookie(cookie)
+  //     }
+  //     console.log('Session has been loaded in the browser')
+  //   }
+  // }
 
   // const startVideoButton = await page.$('#startVideoButton')
   // startVideoButton.click()
