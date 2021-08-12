@@ -1,5 +1,10 @@
 # popcat-automation
+
 Auto click by puppeteer
+
+popcat Twitter: https://twitter.com/PopCatClick
+
+![](https://nijialin.com/images/2021/images/2021/popcat/demo.gif)
 
 ```
 npm install  # yarn install
